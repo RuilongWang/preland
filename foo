@@ -1,4 +1,4 @@
-#dlib-lable-supervisor training
+#video >>>> image >>>> 68 landmarks
 
 
 import math
@@ -195,6 +195,7 @@ if __name__=='__main__':
 
     img_list = os.listdir(path)
 
+    all_landmarks = []
     i = 0
     for i in img_list:
         image_array = cv2.imread(os.path.join(path,i),cv2.IMREAD_COLOR)
@@ -202,10 +203,14 @@ if __name__=='__main__':
         crop_size = image_array.shape[0]
 
         # preprocess the face image
+
         face,landmarks = face_preprocess(image = image_array,
                                      landmark_model_type='large',
                                      crop_size=crop_size)
 
         visualize_landmark(image_array=face,landmarks=landmarks)
-        plt.show()
+        #plt.show()
+        all_landmarks.append(np.array(landmarks).T.tolist())
         i += 1
+
+    np.save('y_landmarks.npy', np.array(all_landmarks, dtype=np.float32))
